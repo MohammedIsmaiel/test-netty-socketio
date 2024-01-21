@@ -1,0 +1,54 @@
+<!-- src/main/resources/templates/index.html -->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Socket.IO Thymeleaf Example</title>
+    <script src="socket.io.js"></script>
+    <!-- 
+    <script src="https://cdn.socket.io/4.7.4/socket.io.min.js"
+        integrity="sha384-Gr6Lu2Ajx28mzwyVR8CFkULdCU7kMlZ9UthllibdOSo6qAiN+yXNHqtgdTvFXMT4"
+        crossorigin="anonymous"></script> -->
+</head>
+
+<body>
+
+    <h1>Socket.IO Thymeleaf Example</h1>
+
+    <script th:inline="javascript">
+        var socket = io.connect('http://localhost:8081');
+
+        // // Event listener for when the connection is established
+        // socket.on('connect', function () {
+        //     console.log('Connected to the server!');
+        // });
+
+        socket.on("connect", () => {
+            console.log(socket.connected); // true
+        });
+
+        socket.on("disconnect", () => {
+            console.log(socket.connected); // false
+        });
+
+        // Event listener for receiving messages from the server
+        socket.on(socket.id, function (message) {
+            console.log('Received message from server:', message);
+            // Update the DOM or perform other actions with the received message
+        });
+
+        // Function to send a message to the server
+        function sendMessage() {
+            var message = 'Hello, Server!';
+            console.log(socket.id);
+            socket.emit(socket.id, message);
+            console.log('Sent message to server:', message);
+        }
+    </script>
+
+    <button onclick="sendMessage()">Send Message to Server</button>
+
+</body>
+
+</html>
